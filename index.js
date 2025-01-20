@@ -1,52 +1,33 @@
-import { placeholderPropertyObj as PPO} from "./properties/placeholderPropertyObj.js"
-import { propertyForSaleArr as PFSarr } from "./properties/propertyForSaleArr.js"
+import placeholderPropertyObj from "./properties/placeholderPropertyObj.js"
+import propertyForSaleArr from "./properties/propertyForSaleArr.js"
 
 
-function getPropertyHtml() {
-    let feedHtml =``
 
-    PFSarr.forEach(function (line) {
-        if (line.priceGBP > 0) {
-
-        }feedHtml +=`
+function getPropertyHtml(propertyArray = [placeholderPropertyObj]) {
+    return  propertyArray.map(property => {
+        const {
+            propertyLocation,
+            priceGBP,
+            roomsM2,
+            comment,
+            image
+        } = property 
+        const totalRoomSizeM2 = roomsM2.reduce((total, squere) => total + squere)
+        return`
         <section class="card">
-        <img src="/images/${line.image}">
-            <div class="card-right">
-                <h2>${line.propertyLocation}</h2>
-                <h3>£${line.priceGBP}</h3>
-                <p>${line.comment}</p>
-                <h3>${line.roomsM2.reduce(function(total, value){
-                    return total + value
-                })} m&sup2;</h3>
-            </div>
+                <img src="/images/${image}">
+                <div class="card-right">
+                    <h2>${propertyLocation}</h2>
+                    <h3>${priceGBP}</h3>
+                    <p>${comment}</p>
+                    <h3>${totalRoomSizeM2} m&sup2;</h3>
+                </div>
         </section> 
         `
-    })
-    return feedHtml
+    }).join('')
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-document.getElementById('container').innerHTML = getPropertyHtml()
-
-
-
-
-
-
-
+document.getElementById('container').innerHTML = getPropertyHtml(propertyForSaleArr)
